@@ -18,4 +18,4 @@ load xml local infile 'Badges.xml' into table badges rows identified by '<row>';
 into table badges
 rows identified by '<row>';
   
-the zip files are: Badges.xml, Comments.xml, PostHistory.xml, PostLinks.xml Posts.xml, Tags.xml, Users.xml
+the zip files are: Badges.xml, Comments.xml, PostHistory.xml, PostLinks.xml Posts.xml, Tags.xml, Users.xml, Votex.xml
