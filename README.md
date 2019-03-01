@@ -14,6 +14,6 @@ in case: set global local_infile = 1
 
 you can now import xml files to the database:
 
-load xml local infile 'Badges.xml' /*continue for other xml files*/
+load xml local infile 'Badges.xml' into table badges rows identified by '<row>'; /*continue for other xml files*/
 into table badges
 rows identified by '<row>';
