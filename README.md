@@ -2,6 +2,8 @@
 
 we used wget and p7zip in order to get the xml files.
 
+apt-get install p7zip-full. to get p7zip...
+
 mysql -u myuser -p --local-infile stackoverflow
 
 in case: set global local_infile = 1
