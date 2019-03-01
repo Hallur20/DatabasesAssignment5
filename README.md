@@ -14,7 +14,7 @@ in case: set global local_infile = 1
 
 you can now import xml files to the database:
 
-"load xml local infile 'Badges.xml' into table badges rows identified by '<row>'";
+load xml local infile 'Badges.xml' into table badges rows identified by '-<row>-';
 
   
 the zip files are: Badges.xml, Comments.xml, PostHistory.xml, PostLinks.xml Posts.xml, Tags.xml, Users.xml, Votes.xml
