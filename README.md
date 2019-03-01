@@ -6,7 +6,7 @@ apt-get install p7zip-full. to get p7zip...
 
 wget <url> to get file...
   
-p7 e <full file name> to extract to current folder.
+7z e <full zip file name> to extract to current folder.
 
 mysql -u myuser -p --local-infile stackoverflow
 
