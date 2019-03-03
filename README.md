@@ -20,7 +20,7 @@ set global local_infile = 1
 you can now import xml files to the database:
 <pre>
 <code>
-load xml local infile 'Badges.xml' into table badges rows identified by '<row>';
+load xml local infile 'Badges.xml' into table badges rows identified by '<<p>row</p>';
  </code>
   </pre>
 the xml files that needs to infile: Badges.xml, Comments.xml, PostHistory.xml, PostLinks.xml Posts.xml, Tags.xml, Users.xml, Votes.xml
