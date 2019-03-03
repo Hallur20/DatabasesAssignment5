@@ -208,6 +208,7 @@ load xml local infile 'Comments.xml' into table comments rows identified by '<ro
      load xml local infile 'Votes.xml' into table votes identified by '<row>';
      ```
 Exercise 1: 
+
 ```sql
 DELIMITER $$
 CREATE DEFINER=`root`@`%` PROCEDURE `denormalizeComments`(idPost int(11))
