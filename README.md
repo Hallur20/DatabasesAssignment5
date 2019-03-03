@@ -240,13 +240,60 @@ DELIMITER ;
 ```
 Exercise 4:
 ```sql
-select (select DisplayName from users users_table where users_table.Id = posts_table.OwnerUserId) as questioner,
-json_object("displayName" , (Select Displayname from users where users.Id = posts_table.OwnerUserId), "question",posts_table.title, "answers", (select (json_arrayagg(json_object("displayName", (Select Displayname from users where users.id = UserId) ,"answer",text, "score", score))) from comments comments_table where comments_table.PostId = posts_table.id) ,"score", posts_table.score)
-from posts posts_table
-where posts_table.title != ""
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`%` 
+    SQL SECURITY DEFINER
+VIEW `QuestionAndAnswers` AS
+    SELECT 
+        (SELECT 
+                `users_table`.`DisplayName`
+            FROM
+                `users` `users_table`
+            WHERE
+                (`users_table`.`Id` = `posts_table`.`OwnerUserId`)) AS `questioner`,
+        JSON_OBJECT('displayName',
+                (SELECT 
+                        `users`.`DisplayName`
+                    FROM
+                        `users`
+                    WHERE
+                        (`users`.`Id` = `posts_table`.`OwnerUserId`)),
+                'question',
+                `posts_table`.`Title`,
+                'answers',
+                (SELECT 
+                        JSON_ARRAYAGG(JSON_OBJECT('displayName',
+                                            (SELECT 
+                                                    `users`.`DisplayName`
+                                                FROM
+                                                    `users`
+                                                WHERE
+                                                    (`users`.`Id` = `comments_table`.`UserId`)),
+                                            'answer',
+                                            `comments_table`.`Text`,
+                                            'score',
+                                            `comments_table`.`Score`))
+                    FROM
+                        `comments` `comments_table`
+                    WHERE
+                        (`comments_table`.`PostId` = `posts_table`.`Id`)),
+                'score',
+                `posts_table`.`Score`) AS `json`
+    FROM
+        `posts` `posts_table`
+    WHERE
+        (`posts_table`.`Title` <> '')
 ```
 Exercise 5:
 ```sql
-
+CREATE DEFINER=`root`@`%` PROCEDURE `searchPostsWithKeyWord`(postKeyWord varchar(255))
+BEGIN
+SELECT 
+    json_extract(json, '$.question') AS question,
+    json_extract(json, '$.answers') AS answers,
+    json_length(json_extract(json, '$.answers')) as amount
+FROM QuestionAndAnswers where json_extract(json, '$.question') like concat('%', postKeyWord, '%');
+END
 ```
 
