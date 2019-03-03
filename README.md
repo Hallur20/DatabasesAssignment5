@@ -101,7 +101,7 @@ DELIMITER ;
 
 
 
-<h2>Set up the database<g-emoji class="g-emoji" alias="checkered_flag" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f3c1.png">🏁</g-emoji></h2>
+<h2>Set up the database if needed<g-emoji class="g-emoji" alias="checkered_flag" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f3c1.png">🏁</g-emoji></h2>
 
 1- Open MySQL workbench and use the following quries then execute
 ```sql
