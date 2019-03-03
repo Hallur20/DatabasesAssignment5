@@ -246,7 +246,6 @@ DELIMITER ;
 ```
 Exercise 4:
 ```sql
-DELIMITER $$
 CREATE 
     ALGORITHM = UNDEFINED 
     DEFINER = `root`@`%` 
@@ -291,8 +290,6 @@ VIEW `QuestionAndAnswers` AS
         `posts` `posts_table`
     WHERE
         (`posts_table`.`Title` <> '')
-        END$$
-DELIMITER ;
 ```
 Exercise 5:
 ```sql
