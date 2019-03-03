@@ -26,7 +26,7 @@ select postId, json_arrayagg(JSON_OBJECT('id', Id, 'postId', PostId, "score", Sc
 END
 
 q2:
---sql
+```sql
 DELIMITER $$
 CREATE TRIGGER before_comment_update
 after insert ON comments
@@ -35,7 +35,7 @@ after insert ON comments
 CALL denormalizeComments(new.PostId);
 END$$
 DELIMITER ;
---
+```
 
 
 
