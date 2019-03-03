@@ -245,3 +245,11 @@ update posts set commentCount = commentCount+1 where Id = pId;
 call denormalizeComments(pId);
 END
 ```
+Exercise 4:
+```sql
+select (select DisplayName from users users_table where users_table.Id = posts_table.OwnerUserId) as questioner,
+json_object("displayName" , (Select Displayname from users where users.Id = posts_table.OwnerUserId), "question",posts_table.title, "answers", (select (json_arrayagg(json_object("displayName", (Select Displayname from users where users.id = UserId) ,"answer",text, "score", score))) from comments comments_table where comments_table.PostId = posts_table.id) ,"score", posts_table.score)
+from posts posts_table
+where posts_table.title != ""
+```
+
