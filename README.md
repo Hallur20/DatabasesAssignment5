@@ -149,7 +149,7 @@ apt-get install wget
 </code>
 </pre>
 
-5-Now download the codde.stachexchange 7z file 
+5-Now download the code.stachexchange 7z file 
 
 <pre>
 <code>
@@ -204,9 +204,10 @@ load xml local infile 'Comments.xml' into table comments rows identified by '<ro
   load xml local infile 'Users.xml' into table users identified by '<row>';
   ```   
      *For the Votes table
-  ```sql
+     
+```sql
      load xml local infile 'Votes.xml' into table votes identified by '<row>';
-     ```
+```
      
 Exercise 1: 
 
