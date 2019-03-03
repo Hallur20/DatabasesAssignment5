@@ -3,6 +3,104 @@
 <h2>Introduction <g-emoji class="g-emoji" alias="page_with_curl" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f4c3.png">📃</g-emoji></h2>
 We used vagrant and docker <g-emoji class="g-emoji" alias="whale2" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f40b.png">🐋</g-emoji> to create the database,and we used coffe.stackexchange data from stackexchange for this assignment "https://archive.org/download/stackexchange/coffee.stackexchange.com.7z". The solution for the assignment are made in MySQL workbench.  
 
+
+<h2>Exercises</h2>
+Exercise 1: 
+
+```sql
+DELIMITER $$
+CREATE DEFINER=`root`@`%` PROCEDURE `denormalizeComments`(idPost int(11))
+BEGIN
+select postId, json_arrayagg(JSON_OBJECT('id', Id, 'postId', PostId, "score", Score, "text", Text, "creationDate", CreationDate, "userId", UserId)) as jsoncomments from comments where postId = idPost;
+END$$
+DELIMITER ;
+```
+
+Exercise 2:
+```sql
+DELIMITER $$
+CREATE TRIGGER before_comment_update
+after insert ON comments
+ FOR EACH ROW
+ BEGIN
+CALL denormalizeComments(new.PostId);
+END$$
+DELIMITER ;
+```
+Exercise 3:
+```sql
+DELIMITER $$
+CREATE DEFINER=`root`@`%` PROCEDURE `commentPost`(cId int(11),pId int(11), textM Text, uId int(11))
+BEGIN
+insert into comments(id, PostId, Score,Text,CreationDate,UserId)values(cId, pId, 0, textM, NOW(), uId);
+update posts set commentCount = commentCount+1 where Id = pId;
+call denormalizeComments(pId);
+END$$
+DELIMITER ;
+```
+Exercise 4:
+```sql
+CREATE 
+    ALGORITHM = UNDEFINED 
+    DEFINER = `root`@`%` 
+    SQL SECURITY DEFINER
+VIEW `QuestionAndAnswers` AS
+    SELECT 
+        (SELECT 
+                `users_table`.`DisplayName`
+            FROM
+                `users` `users_table`
+            WHERE
+                (`users_table`.`Id` = `posts_table`.`OwnerUserId`)) AS `questioner`,
+        JSON_OBJECT('displayName',
+                (SELECT 
+                        `users`.`DisplayName`
+                    FROM
+                        `users`
+                    WHERE
+                        (`users`.`Id` = `posts_table`.`OwnerUserId`)),
+                'question',
+                `posts_table`.`Title`,
+                'answers',
+                (SELECT 
+                        JSON_ARRAYAGG(JSON_OBJECT('displayName',
+                                            (SELECT 
+                                                    `users`.`DisplayName`
+                                                FROM
+                                                    `users`
+                                                WHERE
+                                                    (`users`.`Id` = `comments_table`.`UserId`)),
+                                            'answer',
+                                            `comments_table`.`Text`,
+                                            'score',
+                                            `comments_table`.`Score`))
+                    FROM
+                        `comments` `comments_table`
+                    WHERE
+                        (`comments_table`.`PostId` = `posts_table`.`Id`)),
+                'score',
+                `posts_table`.`Score`) AS `json`
+    FROM
+        `posts` `posts_table`
+    WHERE
+        (`posts_table`.`Title` <> '')
+```
+Exercise 5:
+```sql
+DELIMITER $$
+CREATE DEFINER=`root`@`%` PROCEDURE `searchPostsWithKeyWord`(postKeyWord varchar(255))
+BEGIN
+SELECT 
+    json_extract(json, '$.question') AS question,
+    json_extract(json, '$.answers') AS answers,
+    json_length(json_extract(json, '$.answers')) as amount
+FROM QuestionAndAnswers where json_extract(json, '$.question') like concat('%', postKeyWord, '%');
+END$$
+DELIMITER ;
+```
+
+
+
 <h2>Set up the database<g-emoji class="g-emoji" alias="checkered_flag" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f3c1.png">🏁</g-emoji></h2>
 
 1- Open MySQL workbench and use the following quries then execute
@@ -208,99 +306,3 @@ load xml local infile 'Comments.xml' into table comments rows identified by '<ro
 ```sql
      load xml local infile 'Votes.xml' into table votes identified by '<row>';
 ```
-
-<h2>Exercises</h2>
-Exercise 1: 
-
-```sql
-DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `denormalizeComments`(idPost int(11))
-BEGIN
-select postId, json_arrayagg(JSON_OBJECT('id', Id, 'postId', PostId, "score", Score, "text", Text, "creationDate", CreationDate, "userId", UserId)) as jsoncomments from comments where postId = idPost;
-END$$
-DELIMITER ;
-```
-
-Exercise 2:
-```sql
-DELIMITER $$
-CREATE TRIGGER before_comment_update
-after insert ON comments
- FOR EACH ROW
- BEGIN
-CALL denormalizeComments(new.PostId);
-END$$
-DELIMITER ;
-```
-Exercise 3:
-```sql
-DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `commentPost`(cId int(11),pId int(11), textM Text, uId int(11))
-BEGIN
-insert into comments(id, PostId, Score,Text,CreationDate,UserId)values(cId, pId, 0, textM, NOW(), uId);
-update posts set commentCount = commentCount+1 where Id = pId;
-call denormalizeComments(pId);
-END$$
-DELIMITER ;
-```
-Exercise 4:
-```sql
-CREATE 
-    ALGORITHM = UNDEFINED 
-    DEFINER = `root`@`%` 
-    SQL SECURITY DEFINER
-VIEW `QuestionAndAnswers` AS
-    SELECT 
-        (SELECT 
-                `users_table`.`DisplayName`
-            FROM
-                `users` `users_table`
-            WHERE
-                (`users_table`.`Id` = `posts_table`.`OwnerUserId`)) AS `questioner`,
-        JSON_OBJECT('displayName',
-                (SELECT 
-                        `users`.`DisplayName`
-                    FROM
-                        `users`
-                    WHERE
-                        (`users`.`Id` = `posts_table`.`OwnerUserId`)),
-                'question',
-                `posts_table`.`Title`,
-                'answers',
-                (SELECT 
-                        JSON_ARRAYAGG(JSON_OBJECT('displayName',
-                                            (SELECT 
-                                                    `users`.`DisplayName`
-                                                FROM
-                                                    `users`
-                                                WHERE
-                                                    (`users`.`Id` = `comments_table`.`UserId`)),
-                                            'answer',
-                                            `comments_table`.`Text`,
-                                            'score',
-                                            `comments_table`.`Score`))
-                    FROM
-                        `comments` `comments_table`
-                    WHERE
-                        (`comments_table`.`PostId` = `posts_table`.`Id`)),
-                'score',
-                `posts_table`.`Score`) AS `json`
-    FROM
-        `posts` `posts_table`
-    WHERE
-        (`posts_table`.`Title` <> '')
-```
-Exercise 5:
-```sql
-DELIMITER $$
-CREATE DEFINER=`root`@`%` PROCEDURE `searchPostsWithKeyWord`(postKeyWord varchar(255))
-BEGIN
-SELECT 
-    json_extract(json, '$.question') AS question,
-    json_extract(json, '$.answers') AS answers,
-    json_length(json_extract(json, '$.answers')) as amount
-FROM QuestionAndAnswers where json_extract(json, '$.question') like concat('%', postKeyWord, '%');
-END$$
-DELIMITER ;
-```
-
