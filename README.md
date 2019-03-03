@@ -208,6 +208,8 @@ load xml local infile 'Comments.xml' into table comments rows identified by '<ro
 ```sql
      load xml local infile 'Votes.xml' into table votes identified by '<row>';
 ```
+
+     <h2>Exercises</h2>
      
 Exercise 1: 
 
