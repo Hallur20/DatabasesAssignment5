@@ -1,5 +1,6 @@
 # DatabasesAssignment5
 
+<h2>Introduction</h2>
 we used wget and p7zip in order to get the xml files.
 
 apt-get install p7zip-full. to get p7zip...
@@ -10,24 +11,27 @@ wget url to get file...
 
 mysql -u myuser -p --local-infile stackoverflow
 
-in case: set global local_infile = 1
-
+in case: 
+<code>
+set global local_infile = 1
+</cod>
 you can now import xml files to the database:
 
-load xml local infile 'Badges.xml' into table badges rows identified by '< row .>';
-
+<code>
+load xml local infile 'Badges.xml' into table badges rows identified by '<row>';
+ </code>
   
-the zip files are: Badges.xml, Comments.xml, PostHistory.xml, PostLinks.xml Posts.xml, Tags.xml, Users.xml, Votes.xml
+the xml files that needs to infile: Badges.xml, Comments.xml, PostHistory.xml, PostLinks.xml Posts.xml, Tags.xml, Users.xml, Votes.xml
 
 
-q1: 
+Exercise 1: 
 ```sql
 CREATE DEFINER=`root`@`%` PROCEDURE `denormalizeComments`(idPost int(11))
 BEGIN
 select postId, json_arrayagg(JSON_OBJECT('id', Id, 'postId', PostId, "score", Score, "text", Text, "creationDate", CreationDate, "userId", UserId)) as jsoncomments from comments where postId = idPost;
 END
 ```
-q2:
+Exercise 2:
 ```sql
 DELIMITER $$
 CREATE TRIGGER before_comment_update
@@ -38,7 +42,7 @@ CALL denormalizeComments(new.PostId);
 END$$
 DELIMITER ;
 ```
-q3:
+Exercise 3:
 ```sql
 CREATE DEFINER=`root`@`%` PROCEDURE `commentPost`(cId int(11),pId int(11), textM Text, uId int(11))
 BEGIN
