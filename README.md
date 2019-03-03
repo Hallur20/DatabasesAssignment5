@@ -220,10 +220,12 @@ load xml local infile 'Comments.xml' into table comments rows identified by '<ro
 
 Exercise 1: 
 ```sql
+DELIMITER $$
 CREATE DEFINER=`root`@`%` PROCEDURE `denormalizeComments`(idPost int(11))
 BEGIN
 select postId, json_arrayagg(JSON_OBJECT('id', Id, 'postId', PostId, "score", Score, "text", Text, "creationDate", CreationDate, "userId", UserId)) as jsoncomments from comments where postId = idPost;
-END
+END$$
+DELIMITER ;
 ```
 Exercise 2:
 ```sql
@@ -238,12 +240,14 @@ DELIMITER ;
 ```
 Exercise 3:
 ```sql
+DELIMITER $$
 CREATE DEFINER=`root`@`%` PROCEDURE `commentPost`(cId int(11),pId int(11), textM Text, uId int(11))
 BEGIN
 insert into comments(id, PostId, Score,Text,CreationDate,UserId)values(cId, pId, 0, textM, NOW(), uId);
 update posts set commentCount = commentCount+1 where Id = pId;
 call denormalizeComments(pId);
-END
+END$$
+DELIMITER ;
 ```
 Exercise 4:
 ```sql
