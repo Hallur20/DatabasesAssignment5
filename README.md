@@ -129,30 +129,35 @@ docker ecex -it some-mysql -bash
 
 4- When you are inside "some-mysql" container download the wget and p7zip 
 first make a apt update:
+
 <pre>
 <code>
 apt-get install update
 </code>
 </pre>
+
 then download them using those two commands
 <pre>
 <code>
 apt-get install p7zip-full
 </code>
 </pre>
+
 <pre>
 <code>
 apt-get install wget
 </code>
 </pre>
+
 5-Now download the codde.stachexchange 7z file 
+
 <pre>
 <code>
 wget https://archive.org/download/stackexchange/coffee.stackexchange.com.7z
 </code>
 </pre>
-6-After downloading the file now we need to extract.
 
+6-After downloading the file now we need to extract.
   <pre>
 <code>
 7z e coffee.stackexchange.com.7z  
@@ -197,9 +202,11 @@ load xml local infile 'Comments.xml' into table comments rows identified by '<ro
   *For the Users table
   ```sql
   load xml local infile 'Users.xml' into table users identified by '<row>';
-  ```
-     
-     <h2>Exercises</h2>
+  ```   
+     *For the Votes table
+  ```sql
+     load xml local infile 'Votes.xml' into table votes identified by '<row>';
+     ```
 Exercise 1: 
 ```sql
 DELIMITER $$
