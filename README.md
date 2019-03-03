@@ -3,7 +3,7 @@
 <h2>Introduction</h2>
 We used vagrant and docker to create the database,and we used coffe.stackexchange data from stackexchange for this assignment "https://archive.org/download/stackexchange/coffee.stackexchange.com.7z". The solution for the assignment are made in MySQL workbench.  
 
-<h2>Set up the database <g-emoji class="g-emoji" alias="warning" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/26a0.png">⚠️</g-emoji></h2>
+<h2>Set up the database<g-emoji class="g-emoji" alias="checkered_flag" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f3c1.png">🏁</g-emoji>
 
 1- Open MySQL workbench and use the following quries then execute
 ```sql
