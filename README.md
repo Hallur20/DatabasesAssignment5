@@ -25,6 +25,20 @@ BEGIN
 select postId, json_arrayagg(JSON_OBJECT('id', Id, 'postId', PostId, "score", Score, "text", Text, "creationDate", CreationDate, "userId", UserId)) as jsoncomments from comments where postId = idPost;
 END
 
+q2:
+--sql
+DELIMITER $$
+CREATE TRIGGER before_comment_update
+after insert ON comments
+ FOR EACH ROW
+ BEGIN
+CALL denormalizeComments(new.PostId);
+END$$
+DELIMITER ;
+--
+
+
+
 q3:
 CREATE DEFINER=`root`@`%` PROCEDURE `commentPost`(cId int(11),pId int(11), textM Text, uId int(11))
 BEGIN
