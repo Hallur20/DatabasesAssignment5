@@ -11,16 +11,18 @@ wget url to get file...
 
 mysql -u myuser -p --local-infile stackoverflow
 
-in case: 
+in case:
+<pre>
 <code>
 set global local_infile = 1
-</cod>
+</code>
+</pre>
 you can now import xml files to the database:
-
+<pre>
 <code>
 load xml local infile 'Badges.xml' into table badges rows identified by '<row>';
  </code>
-  
+  </pre>
 the xml files that needs to infile: Badges.xml, Comments.xml, PostHistory.xml, PostLinks.xml Posts.xml, Tags.xml, Users.xml, Votes.xml
 
 
