@@ -1,24 +1,9 @@
 # DatabasesAssignment5
 
 <h2>Introduction</h2>
-we used wget and p7zip in order to get the xml files.
+We used vagrant and docker to create the database,and we used coffe.stackexchange data from stackexchange for this assignment "https://archive.org/download/stackexchange/coffee.stackexchange.com.7z". The solution for the assignment are made in MySQL workbench.  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h2>Set up</h2>
+<h2>Set up the database</h2>
 
 1- Open MySQL workbench and use the following quries then execute
 ```sql
@@ -255,5 +240,9 @@ select (select DisplayName from users users_table where users_table.Id = posts_t
 json_object("displayName" , (Select Displayname from users where users.Id = posts_table.OwnerUserId), "question",posts_table.title, "answers", (select (json_arrayagg(json_object("displayName", (Select Displayname from users where users.id = UserId) ,"answer",text, "score", score))) from comments comments_table where comments_table.PostId = posts_table.id) ,"score", posts_table.score)
 from posts posts_table
 where posts_table.title != ""
+```
+Exercise 5:
+```sql
+
 ```
 
