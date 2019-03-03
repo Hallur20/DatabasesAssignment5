@@ -38,7 +38,7 @@ call denormalizeComments(pId);
 END$$
 DELIMITER ;
 ```
-Exercise 4:
+Exercise 4 (run this by right clicking 'views' and then insert code):
 ```sql
 CREATE 
     ALGORITHM = UNDEFINED 
