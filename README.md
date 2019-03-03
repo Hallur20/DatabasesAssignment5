@@ -184,7 +184,7 @@ set global local_infile = 1
 </code>
 </pre>
 
-9-Now we need to infile the xml files to our database table
+9-Now we need to infile the xml files to our database tables /n
 *For the Badges table
 ```sql
 load xml local infile 'Badges.xml' into table badges rows identified by '<row>';
