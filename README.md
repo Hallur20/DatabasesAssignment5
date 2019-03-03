@@ -298,7 +298,6 @@ SELECT
     json_extract(json, '$.answers') AS answers,
     json_length(json_extract(json, '$.answers')) as amount
 FROM QuestionAndAnswers where json_extract(json, '$.question') like concat('%', postKeyWord, '%');
-END
 END$$
 DELIMITER ;
 ```
