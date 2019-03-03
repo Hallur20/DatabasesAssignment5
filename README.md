@@ -240,6 +240,7 @@ DELIMITER ;
 ```
 Exercise 4:
 ```sql
+DELIMITER $$
 CREATE 
     ALGORITHM = UNDEFINED 
     DEFINER = `root`@`%` 
@@ -284,9 +285,12 @@ VIEW `QuestionAndAnswers` AS
         `posts` `posts_table`
     WHERE
         (`posts_table`.`Title` <> '')
+        END$$
+DELIMITER ;
 ```
 Exercise 5:
 ```sql
+DELIMITER $$
 CREATE DEFINER=`root`@`%` PROCEDURE `searchPostsWithKeyWord`(postKeyWord varchar(255))
 BEGIN
 SELECT 
@@ -295,5 +299,7 @@ SELECT
     json_length(json_extract(json, '$.answers')) as amount
 FROM QuestionAndAnswers where json_extract(json, '$.question') like concat('%', postKeyWord, '%');
 END
+END$$
+DELIMITER ;
 ```
 
